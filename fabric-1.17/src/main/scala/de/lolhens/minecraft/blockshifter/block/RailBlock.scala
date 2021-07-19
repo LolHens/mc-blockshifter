@@ -48,7 +48,7 @@ class RailBlock() extends FacingBlock(RailBlock.settings) {
       .iterator
       .filterNot(_.getAxis == facingAxis)
       .filter { direction =>
-        val offset = pos.offset(direction)
+        val offset: BlockPos = pos.offset(direction)
         val state = world.getBlockState(offset)
         state.isOf(this) && (state.getBlock match {
           case rail: RailBlock =>
@@ -181,7 +181,7 @@ class RailBlock() extends FacingBlock(RailBlock.settings) {
     val neighborAlreadyPowered =
       List(movementDirection, movementDirection.getOpposite)
         .iterator
-        .map(pos.offset)
+        .map[BlockPos](pos.offset)
         .filter(isThisRail)
         .exists(world.getBlockState(_).get(RailBlock.POWERED))
 
@@ -325,7 +325,7 @@ class RailBlock() extends FacingBlock(RailBlock.settings) {
                       follow(shiftEnd, movementDirection.getOpposite)
                         .take(shiftLength)
                         .flatMap(betweenRails(_).map { pos =>
-                          val offset = pos.offset(movementDirection)
+                          val offset: BlockPos = pos.offset(movementDirection)
                           val state: BlockState = world.getBlockState(pos)
                           val entityOption: Option[BlockEntity] = Option(world.getBlockEntity(pos))
                           (pos, offset, state, entityOption)
